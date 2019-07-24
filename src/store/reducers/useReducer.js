@@ -1,3 +1,5 @@
+import { ADD_FEATURE, REMOVE_FEATURE } from '../actions/index';
+
 export const initialState = {
   additionalPrice: 0,
   car: {

@@ -1,6 +1,8 @@
 import React, { useReducer } from 'react';
 //import { connect } from 'react-redux';
-//import { addFeature, removeFeature } from './store/actions';
+import { useSelector, useDispatch } from 'react-redux';
+//import { addFeature, removeFeature } from './store/actions/index';
+import { ADD_FEATURE, REMOVE_FEATURE } from './store/actions/index';
 import { carReducer, initialState } from './store/reducers/useReducer';
 
 import Header from './components/Header';
@@ -9,12 +11,15 @@ import AdditionalFeatures from './components/AdditionalFeatures';
 import Total from './components/Total';
 
 const App = (props) => {
-  const [inventory, dispatch] = useReducer(carReducer, initialState)
+  const [additionalPrice, car, store] = useSelector(state => [ state.additionalPrice, state.car, state.store ])
+  const dispatch = useDispatch();
+  
+  // const [inventory, dispatch] = useReducer(carReducer, initialState)
   
   const addToCar = (event, feature) => {
     event.preventDefault();
     dispatch({
-      type: 'ADD_FEATURE',
+      type: ADD_FEATURE,
       payload: feature
     })
   }
@@ -22,12 +27,12 @@ const App = (props) => {
   const removeFromCar = (event, feature) => {
     event.preventDefault();
     dispatch({
-      type: 'REMOVE_FEATURE',
+      type: REMOVE_FEATURE,
       payload: feature
     })
   }
 
-  /*
+  /* commenting out MVP Redux code
   const addToCar = (event, feature) => {
     event.preventDefault();
     props.addFeature(feature);
@@ -43,12 +48,12 @@ const App = (props) => {
   return (
     <div className="boxes">
       <div className="box">
-        <Header car={inventory.car} />
-        <AddedFeatures car={inventory.car} removeFromCar={removeFromCar}/>
+        <Header car={car} />
+        <AddedFeatures car={car} removeFromCar={removeFromCar}/>
       </div>
       <div className="box">
-        <AdditionalFeatures store={inventory.store} addToCar={addToCar}/>
-        <Total car={inventory.car} additionalPrice={inventory.additionalPrice} />
+        <AdditionalFeatures store={store} addToCar={addToCar}/>
+        <Total car={car} additionalPrice={additionalPrice} />
       </div>
     </div>
   );
