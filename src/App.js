@@ -1,13 +1,33 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { addFeature, removeFeature } from './store/actions';
+import React, { useReducer } from 'react';
+//import { connect } from 'react-redux';
+//import { addFeature, removeFeature } from './store/actions';
+import { carReducer, initialState } from './store/reducers/useReducer';
+
 import Header from './components/Header';
 import AddedFeatures from './components/AddedFeatures';
 import AdditionalFeatures from './components/AdditionalFeatures';
 import Total from './components/Total';
 
 const App = (props) => {
+  const [inventory, dispatch] = useReducer(carReducer, initialState)
+  
+  const addToCar = (event, feature) => {
+    event.preventDefault();
+    dispatch({
+      type: 'ADD_FEATURE',
+      payload: feature
+    })
+  }
 
+  const removeFromCar = (event, feature) => {
+    event.preventDefault();
+    dispatch({
+      type: 'REMOVE_FEATURE',
+      payload: feature
+    })
+  }
+
+  /*
   const addToCar = (event, feature) => {
     event.preventDefault();
     props.addFeature(feature);
@@ -18,27 +38,25 @@ const App = (props) => {
     event.preventDefault();
     props.removeFeature(feature)
   };
- 
-  /*
-  const buyItem = item => {
-    // dipsatch an action here to add an item
-  };
   */
 
   return (
     <div className="boxes">
       <div className="box">
-        <Header car={props.car} />
-        <AddedFeatures car={props.car} removeFromCar={removeFromCar}/>
+        <Header car={inventory.car} />
+        <AddedFeatures car={inventory.car} removeFromCar={removeFromCar}/>
       </div>
       <div className="box">
-        <AdditionalFeatures store={props.store} addToCar={addToCar}/>
-        <Total car={props.car} additionalPrice={props.additionalPrice} />
+        <AdditionalFeatures store={inventory.store} addToCar={addToCar}/>
+        <Total car={inventory.car} additionalPrice={inventory.additionalPrice} />
       </div>
     </div>
   );
 };
 
+export default App;
+
+/*
 const mapStateToProps = (state) => ({
   additionalPrice: state.additionalPrice,
   car: state.car,
@@ -46,3 +64,4 @@ const mapStateToProps = (state) => ({
 })
 
 export default connect(mapStateToProps, { addFeature, removeFeature })(App);
+*/
